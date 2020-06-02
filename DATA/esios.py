@@ -222,7 +222,7 @@ class ESIOS(object):
         else:
             return None
     
-    def get_multiple_series_Portugal(self, indicators, start, end):
+    def get_multiple_series(self, indicators, start, end, country):
         """
         Get multiple series data
         :param indicators: List of indicators
@@ -234,93 +234,23 @@ class ESIOS(object):
         df_list = list()
         names = list()
         variable = 1
-        self.allowed_geo_id = [1, 8741]  # Portugal
+        geo_id = {'Spain':[3,8741], 'France':[2, 8741], 'Portugal':[1, 8741]}
+        
         for i in range(len(indicators)):
-
-            name = self.__indicators_name__[indicators[i]]
-            names.append(name)
-            print('Descargando ' + name)
-            if i == 0:
-                # Assign the first indicator
-                df = self.get_data(indicators[i], start, end)
-                df = df[df['geo_id'].isin(self.allowed_geo_id)]  # select by geography
-                df.rename(columns={'value': name}, inplace=True)
-                df_list.append(df)
-            else:
-                # merge the newer indicators
-                df_new = self.get_data(indicators[i], start, end)
-                if df_new is not None:
-                    df_new = df_new[df_new['geo_id'].isin(self.allowed_geo_id)]  # select by geography
-                    df_new.rename(columns={'value': name}, inplace=True)
-                    df = df.join(df_new[name])
-                df_list.append(df_new)
-                
-        return df, df_list, names
-
-    def get_multiple_series_France(self, indicators, start, end):
-        """
-        Get multiple series data
-        :param indicators: List of indicators
-        :param start: Start date
-        :param end: End date
-        :return:
-        """
-        df = None
-        df_list = list()
-        names = list()
-        variable = 1
-        self.allowed_geo_id = [2, 8741]  # France
-        for i in range(len(indicators)):
-
             name = self.__indicators_name__[indicators[i]]
             names.append(name)
             print('Downloading ' + name)
             if i == 0:
                 # Assign the first indicator
                 df = self.get_data(indicators[i], start, end)
-                df = df[df['geo_id'].isin(self.allowed_geo_id)]  # select by geography
+                df = df[df['geo_id'].isin(geo_id[country])]  # select by geography
                 df.rename(columns={'value': name}, inplace=True)
                 df_list.append(df)
             else:
                 # merge the newer indicators
                 df_new = self.get_data(indicators[i], start, end)
                 if df_new is not None:
-                    df_new = df_new[df_new['geo_id'].isin(self.allowed_geo_id)]  # select by geography
-                    df_new.rename(columns={'value': name}, inplace=True)
-                    df = df.join(df_new[name])
-                df_list.append(df_new)
-                
-        return df, df_list, names
-
-    def get_multiple_series_Spain(self, indicators, start, end):
-        """
-        Get multiple series data
-        :param indicators: List of indicators
-        :param start: Start date
-        :param end: End date
-        :return:
-        """
-        df = None
-        df_list = list()
-        names = list()
-        variable = 1
-        self.allowed_geo_id = [3, 8741]  # Spain
-        for i in range(len(indicators)):
-
-            name = self.__indicators_name__[indicators[i]]
-            names.append(name)
-            print('Downloading ' + name)
-            if i == 0:
-                # Assign the first indicator
-                df = self.get_data(indicators[i], start, end)
-                df = df[df['geo_id'].isin(self.allowed_geo_id)]  # select by geography
-                df.rename(columns={'value': name}, inplace=True)
-                df_list.append(df)
-            else:
-                # merge the newer indicators
-                df_new = self.get_data(indicators[i], start, end)
-                if df_new is not None:
-                    df_new = df_new[df_new['geo_id'].isin(self.allowed_geo_id)]  # select by geography
+                    df_new = df_new[df_new['geo_id'].isin(geo_id[country])]  # select by geography
                     df_new.rename(columns={'value': name}, inplace=True)
                     df = df.join(df_new[name])
                 df_list.append(df_new)
