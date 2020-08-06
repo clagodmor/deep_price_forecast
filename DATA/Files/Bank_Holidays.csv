@@ -1,4 +1,48 @@
-﻿Date;Day;Title;Bank Holiday
+Date;Day;Title;Bank Holiday
+01/01/2010;Friday;New Year's Day;1
+06/01/2010;Wednesday;Epiphany;1
+01/04/2010;Thursday;Maundy Thursday;1
+02/04/2010;Friday;Maundy Friday;1
+01/05/2010;Saturday;Labor Day;1
+15/08/2010;Sunday;Assumption Day;1
+12/10/2010;Tuesday;National Day (Spain);1
+01/11/2010;Monday;All Saints' Day;1
+06/12/2010;Monday;Constitution Day (Spain);1
+08/12/2010;Wednesday;Immaculate Conception;1
+25/12/2010;Saturday;Christmas;1
+01/01/2011;Saturday;New Year's Day;1
+06/01/2011;Thursday;Epiphany;1
+21/04/2011;Thursday;Maundy Thursday;1
+22/04/2011;Friday;Maundy Friday;1
+01/05/2011;Sunday;Labor Day;1
+15/08/2011;Monday;Assumption Day;1
+12/10/2011;Wednesday;National Day (Spain);1
+01/11/2011;Tuesday;All Saints' Day;1
+06/12/2011;Tuesday;Constitution Day (Spain);1
+08/12/2011;Thursday;Immaculate Conception;1
+25/12/2011;Sunday;Christmas;1
+01/01/2012;Sunday;New Year's Day;1
+06/01/2012;Friday;Epiphany;1
+05/04/2012;Thursday;Maundy Thursday;1
+06/04/2012;Friday;Maundy Friday;1
+01/05/2012;Tuesday;Labor Day;1
+15/08/2012;Wednesday;Assumption Day;1
+12/10/2012;Friday;National Day (Spain);1
+01/11/2012;Thursday;All Saints' Day;1
+06/12/2012;Thursday;Constitution Day (Spain);1
+08/12/2012;Saturday;Immaculate Conception;1
+25/12/2012;Tuesday;Christmas;1
+01/01/2013;Tuesday;New Year's Day;1
+06/01/2013;Sunday;Epiphany;1
+28/03/2013;Thursday;Maundy Thursday;1
+29/03/2013;Friday;Maundy Friday;1
+01/05/2013;Wednesday;Labor Day;1
+15/08/2013;Thursday;Assumption Day;1
+12/10/2013;Saturday;National Day (Spain);1
+01/11/2013;Friday;All Saints' Day;1
+06/12/2013;Friday;Constitution Day (Spain);1
+08/12/2013;Sunday;Immaculate Conception;1
+25/12/2013;Wednesday;sa;1
 01/01/2014;Wednesday;New Year's Day;1
 06/01/2014;Monday;Epiphany;1
 17/04/2014;Thursday;Maundy Thursday;1
