@@ -1,0 +1,2 @@
+model_checkpoint_path: "multi_step_model.ckpt"
+all_model_checkpoint_paths: "multi_step_model.ckpt"
