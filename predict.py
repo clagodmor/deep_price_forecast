@@ -1,23 +1,23 @@
 import os
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta, date
 from esios import *
 from functools import reduce
 import tensorflow as tf
 from tensorflow import keras
 import matplotlib.pyplot as plt
 import streamlit as st
+from datetime import datetime, timedelta, date
 
 
 indicatorsDict = {'demand': 460,'price': 805,'wind':541,'solar':10034}
 
 indicatorsItems = indicatorsDict.items()
-
-start_date = datetime.date.today() - datetime.timedelta(days=31)
+now = datetime.now()
+start_date = datetime.date.today() - datetime.timedelta(days=20)
 end_date = datetime.date.today()
 start_ = start_date.strftime("%Y-%m-%d") + 'T00:00:00'
-end_ = end_date.strftime("%Y-%m-%d") + 'T23:50:00'
+end_ = end_date.strftime("%Y-%m-%d") + now.strftime("T%H:%M:%S")
 token = '6cc21e0b60e9931e7522a6ce72a1a09f3a6fadc6f08b142f956db142c6858bc2'    # Introduce ESIOS token
 esios = ESIOS(token)
 country = 'Spain' #Spain, France or Portugal are the options
@@ -70,8 +70,9 @@ df['demand'] = df['demand'].astype(float)
 df['solar'] = df['solar'].astype(float)
 df['wind'] = df['wind'].astype(float)
 df['price'] = df['price'].astype(float)
+
 date_time = pd.to_datetime(df.pop('Date'), format='%Y-%m-%d %H:%M:%S')
-timestamp_s = date_time.map(datetime.datetime.timestamp)
+timestamp_s = date_time.map(datetime.timestamp)
 day = 24*60*60
 year = (365.2425)*day
 
@@ -79,11 +80,9 @@ df['Day sin'] = np.sin(timestamp_s * (2 * np.pi / day))
 df['Day cos'] = np.cos(timestamp_s * (2 * np.pi / day))
 df['Year sin'] = np.sin(timestamp_s * (2 * np.pi / year))
 df['Year cos'] = np.cos(timestamp_s * (2 * np.pi / year))
-
 # MODELO
 features_considered = ['demand', 'solar', 'wind', 'price', 'Day sin', 'Day cos', 'Year sin', 'Year cos']
 features = df[features_considered]
-# features.index = df['Date']
 
 dataset = features.values
 data_mean = dataset.mean(axis=0)
@@ -110,7 +109,7 @@ def multivariate_window(dataset, target, start_index, end_index, history_size,
 
   return np.array(data), np.array(labels)
 
-past_history = 360
+past_history = 120
 future_target = 6
 STEP = 1
 SINGLE_STEP = False
@@ -126,7 +125,7 @@ val_data_multi = val_data_multi.batch(BATCH_SIZE).repeat()
 
 
 # Create a new model instance
-model = keras.models.load_model('model/multi_step_final.h5')
+model = keras.models.load_model('model/multi_step_cos_sen.h5')
 
 # PLOT FUNCTION
 def time_steps_creation(length):
