@@ -5,7 +5,10 @@ from datetime import datetime, timedelta, date
 from esios import *
 from functools import reduce
 import tensorflow as tf
+from tensorflow import keras
 import matplotlib.pyplot as plt
+import streamlit as st
+
 
 indicatorsDict = {'demand': 460,'price': 805,'wind':541,'solar':10034}
 
@@ -70,50 +73,75 @@ df['price'] = df['price'].astype(float)
 
 
 # MODELO
-features_considered = ['demand', 'solar', 'wind', 'price']
+features_considered = ['demand', 'solar', 'wind','price']
 features = df[features_considered]
 features.index = df['Date']
 
-TRAIN_SPLIT = 40000
 dataset = features.values
-data_mean = dataset[:TRAIN_SPLIT].mean(axis=0)
-data_std = dataset[:TRAIN_SPLIT].std(axis=0)
+data_mean = dataset.mean(axis=0)
+data_std = dataset.std(axis=0)
 dataset = (dataset-data_mean)/data_std
 
+def multivariate_window(dataset, target, start_index, end_index, history_size,
+                      target_size, step, single_step=False):
+  data = []
+  labels = []
+
+  start_index = start_index + history_size
+  if end_index is None:
+    end_index = len(dataset) - target_size
+
+  for i in range(start_index, end_index):
+    indices = range(i-history_size, i, step)
+    data.append(dataset[indices])
+
+    if single_step:
+      labels.append(target[i+target_size])
+    else:
+      labels.append(target[i:i+target_size])
+
+  return np.array(data), np.array(labels)
+
+past_history = 120
+future_target = 6
+STEP = 1
+SINGLE_STEP = False
+TRAIN_SPLIT = 0
+BATCH_SIZE=256
+x_val_multi, y_val_multi = multivariate_window(dataset=dataset, target=dataset[:, 3],
+  start_index=TRAIN_SPLIT, end_index=None, history_size=past_history,
+  target_size=future_target, step=STEP, single_step=SINGLE_STEP)
+
+val_data_multi = tf.data.Dataset.from_tensor_slices((x_val_multi, y_val_multi))
+val_data_multi = val_data_multi.batch(BATCH_SIZE).repeat()
+
+
+
 # Create a new model instance
-model = tf.keras.models.Sequential()
-model.add(tf.keras.layers.LSTM(32,
-                               return_sequences=True,
-                               input_shape=(120, 4)))
-model.add(tf.keras.layers.LSTM(16, activation='relu'))
-model.add(tf.keras.layers.Dense(12))
+model = keras.models.load_model('../multi_step_10d_6h.h5')
 
-# Load the previously saved weights
-checkpoint_path = "models/multi_step_model.ckpt"
-model.load_weights(checkpoint_path)
-
-# Re-evaluate the model
-def create_time_steps(length):
+# PLOT FUNCTION
+def time_steps_creation(length):
   time_steps = []
   for i in range(-length, 0, 1):
     time_steps.append(i)
   return time_steps
 
-def multi_step_plot(history, true_future, prediction):
-  plt.figure(figsize=(12, 6))
-  num_in = create_time_steps(len(history))
-  num_out = len(true_future)
+st.write("""
+# Spain Electrical Price forecast
 
-  plt.plot(num_in, np.array(history[:, 3]), label='History')
-  plt.plot(np.arange(num_out)/1, np.array(true_future), 'bo',
-           label='True Future')
-  if prediction.any():
-    plt.plot(np.arange(num_out)/1, np.array(prediction), 'ro',
-             label='Predicted Future')
-  plt.legend(loc='upper left')
-  plt.show()
+The table below shows the prediction of the electrical price forecast. 
+It is calculating using a window of 5 days, and predicts 12 hours from the moment you run it. """)
+for x, y in val_data_multi.take(1):
+    plt.figure(figsize=(12, 6))
+    num_in = time_steps_creation(len(x[0]))
+    num_out = len(y[0])
 
-for x, y in dataset.take(3):
-  multi_step_plot(x[0], y[0], dataset.predict(x)[0])
-mae = model.evaluate(dataset, steps=1000)
-print("MAE for LSTM is %.4f" %mae)
+    plt.plot(num_in, np.array(x[0][:, 3]), label='History')
+    plt.plot(np.arange(num_out) / STEP, np.array(y[0]), 'bo',
+             label='True Future')
+    if model.predict(x)[0].any():
+        plt.plot(np.arange(num_out) / STEP, np.array(model.predict(x)[0]), 'ro',
+                 label='Predicted Future')
+    plt.legend(loc='upper left')
+    st.pyplot()
