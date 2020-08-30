@@ -1,7 +1,7 @@
 
 Electricity price forecasting using RNN
 ===================
-`#DataScience` `#Python` `#DeepLearning` `#Electricityprice` `#Forecast`
+`#DataScience` `#Python` `#DeepLearning` `#Electricityprice` `#Forecast` `#RNN`
 
 
 ## Objetive ##
@@ -84,12 +84,23 @@ transformed to annual and daily sinus and cosine signal dates.
 ![sin_cos](img/sen_cos.png)
 
 ### Modelling
+In the model part, a study with different configurations and methods has been carried out. It is basically divided into
+2 methodologies with different configurations: 
+ 1. **Univariate time series**
+    * Baseline
+    * RNN- LSTM Model
+ 2. **Multivariate time series**
+    * Single-Step Model
+    * Multi-step Model 
 
+Finally the selected model to make final predictions and save was the Multi-step model with the following configuration:
 
+![model_config](img/model_config.png)
 
 **Files**:
 
-1. [`model_deep_price.ipynb`](model_deep_price.ipynb): a Jupyter Notebook that generates the predictions using Xgboost. 
+1. [`model_deep_price.ipynb`](model_deep_price.ipynb): a Jupyter Notebook with the study of different models and the 
+development of the best fit model using RNN
 
 ### Prediction and visualization
 
@@ -102,27 +113,46 @@ days before in order to make a prediction based on the LSTM model with the best 
 ## About the technology ##
 #### Programming languages and interpreters
 
- - Linux shell: Shell was used intensively to manage files and run scripts.
- - Pycharm: IDE used to create .py files
+ - **Linux shell**: Shell was used intensively to manage files and run scripts.
+ - **Pycharm**: IDE used to create .py files
  - **Python**  language. 
 
 #### Main libraries
 
- - `TensorFlow`:
+ - `TensorFlow`:The model and data are prepared to work with CPU, so it is not required GPU.
  
- `> pip install tensorflow`
+         > pip install tensorflow
  
   - `Streamlit`:
   
- `> pip install streamlit`
+         > pip install streamlit
   
- - `Pandas`: A high-performance, easy-to-use data structures and data analysis tools for Python:
-
+ - `Pandas`
+ - `Numpy` 
+ - `matplotlib.pyplot`
+ - `pydoy & graphviz`: for plot model configuration. Visit [graphviz](https://graphviz.gitlab.io/download/) to download. 
+ 
+         > pip install pydot
+ 
 #### Hardware and Resources
 
  - DELL Optiplex GX 7010 Intel Core i5-3470, 8GB de RAM, Disc SSD  240GB
 
+## How to run this analysis
 
+**Generate training Dataset**
+
+        > jupyter-notebook Get_data.ipynb
+    
+
+**Modelling** 
+
+        > jupyter-notebook model_deep_learning.ipynb 
+    
+**Running prediction APP** 
+
+        > streamlit run prediction.py 
+    
 ## About the author
 
 **Clara Godoy**

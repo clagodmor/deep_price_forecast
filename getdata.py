@@ -14,7 +14,7 @@ indicatorsDict = {'demand': 460,'price': 805,'wind':541,'solar':10034}
 
 indicatorsItems = indicatorsDict.items()
 
-start_date = datetime.date.today() - datetime.timedelta(days=31)
+start_date = datetime.date.today() - datetime.timedelta(days=20)
 end_date = datetime.date.today()
 start_ = start_date.strftime("%Y-%m-%d") + 'T00:00:00'
 end_ = end_date.strftime("%Y-%m-%d") + 'T23:50:00'
