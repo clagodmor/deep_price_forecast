@@ -57,7 +57,7 @@ In this way, information can be downloaded through the REST API service. Since t
  script is configured to perform the data download of the indicators previously mentioned with hourly frequency.<br>
 
 To obtain the information from ESIOS, it is necessary to execute the Jupyter Notebook file 
-[`Get_Data.ipynb`](Get_Data.ipynb). Once the file is executed a **'Data.csv'** file will be generated  
+[`Get_Data.ipynb`](Get_data.ipynb). Once the file is executed a **'Data.csv'** file will be generated  
 
 The files obtained have a similar structure, formed by two fields:
 
@@ -67,7 +67,7 @@ The files obtained have a similar structure, formed by two fields:
 
 
 #### Preprocessing
-Preprocessing is divided in two parts, one make at [`Get_Data.ipynb`](Get_Data.ipynb), which consist in drop duplicates,
+Preprocessing is divided in two parts, one make at [`Get_Data.ipynb`](Get_data.ipynb), which consist in drop duplicates,
 clean NaN and merge the dataset in only one dataframe and export. Also includes an outliners study which concludes in 
 not being significant values, so they are ignored:
 
@@ -105,7 +105,7 @@ development of the best fit model using RNN
 ### Prediction and visualization
 
 The last phase in this project was trying to communicate information clearly and efficiently through plotting the 
-results. For that the [`prediction.py`](prediction.py) uses `streamlit`. There automatically gets today date, and 15 
+results. For that the [`deep_price.py`](deep_price.py) uses `streamlit`. There automatically gets today date, and 15 
 days before in order to make a prediction based on the LSTM model with the best accuracy run in 
 [`model_deep_price.ipynb`](model_deep_price.ipynb)
 
@@ -130,9 +130,6 @@ days before in order to make a prediction based on the LSTM model with the best 
  - `Pandas`
  - `Numpy` 
  - `matplotlib.pyplot`
- - `pydoy & graphviz`: for plot model configuration. Visit [graphviz](https://graphviz.gitlab.io/download/) to download. 
- 
-         > pip install pydot
  
 #### Hardware and Resources
 

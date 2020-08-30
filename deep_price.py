@@ -1,23 +1,24 @@
 import os
 import pandas as pd
 import numpy as np
+from datetime import datetime, timedelta, date
 from esios import *
 from functools import reduce
 import tensorflow as tf
 from tensorflow import keras
 import matplotlib.pyplot as plt
 import streamlit as st
-from datetime import datetime, timedelta, date
-
+from time import gmtime, strftime
 
 indicatorsDict = {'demand': 460,'price': 805,'wind':541,'solar':10034}
 
 indicatorsItems = indicatorsDict.items()
-now = datetime.now()
-start_date = datetime.date.today() - datetime.timedelta(days=20)
+
+start_date = datetime.date.today() - datetime.timedelta(days=10)
 end_date = datetime.date.today()
+now = strftime('T%H:%M:%S',gmtime())
 start_ = start_date.strftime("%Y-%m-%d") + 'T00:00:00'
-end_ = end_date.strftime("%Y-%m-%d") + now.strftime("T%H:%M:%S")
+end_ = end_date.strftime("%Y-%m-%d") + now
 token = '6cc21e0b60e9931e7522a6ce72a1a09f3a6fadc6f08b142f956db142c6858bc2'    # Introduce ESIOS token
 esios = ESIOS(token)
 country = 'Spain' #Spain, France or Portugal are the options
@@ -70,9 +71,8 @@ df['demand'] = df['demand'].astype(float)
 df['solar'] = df['solar'].astype(float)
 df['wind'] = df['wind'].astype(float)
 df['price'] = df['price'].astype(float)
-
 date_time = pd.to_datetime(df.pop('Date'), format='%Y-%m-%d %H:%M:%S')
-timestamp_s = date_time.map(datetime.timestamp)
+timestamp_s = date_time.map(datetime.datetime.timestamp)
 day = 24*60*60
 year = (365.2425)*day
 
@@ -80,9 +80,11 @@ df['Day sin'] = np.sin(timestamp_s * (2 * np.pi / day))
 df['Day cos'] = np.cos(timestamp_s * (2 * np.pi / day))
 df['Year sin'] = np.sin(timestamp_s * (2 * np.pi / year))
 df['Year cos'] = np.cos(timestamp_s * (2 * np.pi / year))
+
 # MODELO
 features_considered = ['demand', 'solar', 'wind', 'price', 'Day sin', 'Day cos', 'Year sin', 'Year cos']
 features = df[features_considered]
+# features.index = df['Date']
 
 dataset = features.values
 data_mean = dataset.mean(axis=0)
@@ -109,8 +111,8 @@ def multivariate_window(dataset, target, start_index, end_index, history_size,
 
   return np.array(data), np.array(labels)
 
-past_history = 120
-future_target = 6
+past_history = 140
+future_target = 12
 STEP = 1
 SINGLE_STEP = False
 TRAIN_SPLIT = 0
@@ -125,7 +127,7 @@ val_data_multi = val_data_multi.batch(BATCH_SIZE).repeat()
 
 
 # Create a new model instance
-model = keras.models.load_model('model/multi_step_cos_sen.h5')
+model = keras.models.load_model('multi_step_final.h5')
 
 # PLOT FUNCTION
 def time_steps_creation(length):
@@ -145,10 +147,16 @@ for x, y in val_data_multi.take(1):
     num_out = len(y[0])
 
     plt.plot(num_in, np.array(x[0][:, 3]), label='History')
-    plt.plot(np.arange(num_out) / STEP, np.array(y[0]), 'g-',
-             label='True Future')
+    # plt.plot(np.arange(num_out) / STEP, np.array(y[0]), 'bo',
+    #          label='True Future')
     if model.predict(x)[0].any():
-        plt.plot(np.arange(num_out) / STEP, np.array(model.predict(x)[0]), 'r-',
+        plt.plot(np.arange(num_out) / STEP, np.array(model.predict(x)[0]), 'ro',
                  label='Predicted Future')
     plt.legend(loc='upper left')
     st.pyplot()
+
+st.button("Re-run")
+
+st.write("""
+You can find how it works and all related information of this app at 
+[GitHub](https://github.com/clagodmor/deep_price_forecast) """)
