@@ -1,8 +1,5 @@
 import os
-import pandas as pd
-import numpy as np
-from datetime import datetime, timedelta, date
-from esios import *
+from data.esios import *
 from functools import reduce
 import tensorflow as tf
 from tensorflow import keras
@@ -14,7 +11,7 @@ indicatorsDict = {'demand': 460,'price': 805,'wind':541,'solar':10034}
 
 indicatorsItems = indicatorsDict.items()
 
-start_date = datetime.date.today() - datetime.timedelta(days=10)
+start_date = datetime.date.today() - datetime.timedelta(days=7)
 end_date = datetime.date.today()
 now = strftime('T%H:%M:%S',gmtime())
 start_ = start_date.strftime("%Y-%m-%d") + 'T00:00:00'
@@ -127,7 +124,7 @@ val_data_multi = val_data_multi.batch(BATCH_SIZE).repeat()
 
 
 # Create a new model instance
-model = keras.models.load_model('multi_step_final.h5')
+model = keras.models.load_model('model/multi_step_final.h5')
 
 # PLOT FUNCTION
 def time_steps_creation(length):
@@ -139,7 +136,8 @@ def time_steps_creation(length):
 st.write("""
 # Spain Electrical Price forecast
 
-The table below shows the prediction of the electrical price forecast. 
+The table below shows the prediction of the electrical price forecast. ements txt
+
 It is calculating using a window of 5 days, and predicts 12 hours from the moment you run it. """)
 for x, y in val_data_multi.take(1):
     plt.figure(figsize=(12, 6))
@@ -160,3 +158,14 @@ st.button("Re-run")
 st.write("""
 You can find how it works and all related information of this app at 
 [GitHub](https://github.com/clagodmor/deep_price_forecast) """)
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+st.write("""
+## About the author
+ 
+**Clara Godoy** 
+Analyst and Developer at [Maxam Int. Corp.](https://www.maxamcorp.com/)
+ - Linkedin: [@claragodoy](https://www.linkedin.com/in/claragodoy/)
+ - Twitter: [@clagodmor](https://twitter.com/clagodmor)""")

@@ -1,0 +1,10 @@
+tensorflow==2.1.0
+matplotlib==3.2.1
+numpy==1.18.1
+pandas==1.0.1
+
+#running APP
+streamlit==0.56.0
+
+#get data from ESIOS API
+./data/esios.py

@@ -33,7 +33,7 @@ documentation of the ESIOS API REST is available [here](https://api.esios.ree.es
 To access the system, it is necessary to request a token by email. Information about how to order the token is 
 available [here](https://www.esios.ree.es/es/pagina/api).
 
-To get the information the [`esios.py`](esios.py) file has been developed. In it you can use "save_indicators_table" function to 
+To get the information the [`esios.py`](data/esios.py) file has been developed. In it you can use "save_indicators_table" function to 
 check all indicators list. 
 When the Daily Market Price is set, some of the factors that most affect are:
 * **Electricity demand**: The total energy consumption for all purposes. The larger the electricity demand, the higher 
@@ -57,7 +57,7 @@ In this way, information can be downloaded through the REST API service. Since t
  script is configured to perform the data download of the indicators previously mentioned with hourly frequency.<br>
 
 To obtain the information from ESIOS, it is necessary to execute the Jupyter Notebook file 
-[`Get_Data.ipynb`](Get_data.ipynb). Once the file is executed a **'Data.csv'** file will be generated  
+[`Get_Data.ipynb`](data/Get_data.ipynb). Once the file is executed a **'Data.csv'** file will be generated  
 
 The files obtained have a similar structure, formed by two fields:
 
@@ -67,7 +67,7 @@ The files obtained have a similar structure, formed by two fields:
 
 
 #### Preprocessing
-Preprocessing is divided in two parts, one make at [`Get_Data.ipynb`](Get_data.ipynb), which consist in drop duplicates,
+Preprocessing is divided in two parts, one make at [`Get_Data.ipynb`](data/Get_data.ipynb), which consist in drop duplicates,
 clean NaN and merge the dataset in only one dataframe and export. Also includes an outliners study which concludes in 
 not being significant values, so they are ignored:
 
@@ -76,7 +76,7 @@ not being significant values, so they are ignored:
 | **Outliners** | 0 | 403 | 506 | 1609 |
 | **%** | 0 | 0.707% | 0.888% | 2.81% |
 
-The second preprocessing part is done before modelling at [`model_deep_price.ipynb`](model_deep_price.ipynb). Besides 
+The second preprocessing part is done before modelling at [`model_deep_price.ipynb`](model/model_deep_price.ipynb). Besides 
 the normalization of data for use in the neural network, the "Date" column has been modified to make it a usable signal.
 Taking into account that the electric price is highly influenced by the daily and annual periodicity, we have 
 transformed to annual and daily sinus and cosine signal dates. 
@@ -99,7 +99,7 @@ Finally the selected model to make final predictions and save was the Multi-step
 
 **Files**:
 
-1. [`model_deep_price.ipynb`](model_deep_price.ipynb): a Jupyter Notebook with the study of different models and the 
+1. [`model_deep_price.ipynb`](model/model_deep_price.ipynb): a Jupyter Notebook with the study of different models and the 
 development of the best fit model using RNN
 
 ### Prediction and visualization
@@ -107,7 +107,7 @@ development of the best fit model using RNN
 The last phase in this project was trying to communicate information clearly and efficiently through plotting the 
 results. For that the [`deep_price.py`](deep_price.py) uses `streamlit`. There automatically gets today date, and 15 
 days before in order to make a prediction based on the LSTM model with the best accuracy run in 
-[`model_deep_price.ipynb`](model_deep_price.ipynb)
+[`model_deep_price.ipynb`](model/model_deep_price.ipynb)
 
  
 ## About the technology ##
@@ -116,40 +116,30 @@ days before in order to make a prediction based on the LSTM model with the best 
  - **Linux shell**: Shell was used intensively to manage files and run scripts.
  - **Pycharm**: IDE used to create .py files
  - **Python**  language. 
-
-#### Main libraries
-
- - `TensorFlow`:The model and data are prepared to work with CPU, so it is not required GPU.
- 
-         > pip install tensorflow
- 
-  - `Streamlit`:
-  
-         > pip install streamlit
-  
- - `Pandas`
- - `Numpy` 
- - `matplotlib.pyplot`
  
 #### Hardware and Resources
 
  - DELL Optiplex GX 7010 Intel Core i5-3470, 8GB de RAM, Disc SSD  240GB
 
 ## How to run this analysis
+**Install required packages**
+
+        > pip install -r requirements.txt
+
+**Running prediction APP** 
+
+        > streamlit run prediction.py 
+
+If you want to train again the model:
 
 **Generate training Dataset**
 
         > jupyter-notebook Get_data.ipynb
     
-
 **Modelling** 
 
         > jupyter-notebook model_deep_learning.ipynb 
-    
-**Running prediction APP** 
 
-        > streamlit run prediction.py 
-    
 ## About the author
 
 **Clara Godoy**
