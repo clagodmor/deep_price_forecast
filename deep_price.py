@@ -108,23 +108,25 @@ def multivariate_window(dataset, target, start_index, end_index, history_size,
 
   return np.array(data), np.array(labels)
 
-past_history = 144
+past_history = 140
 future_target = 12
 STEP = 1
 SINGLE_STEP = False
 TRAIN_SPLIT = 0
-BATCH_SIZE=256
-x_val_multi, y_val_multi = multivariate_window(dataset=dataset, target=dataset[:, 3],
+BATCH_SIZE=16
+x_data, y_data = multivariate_window(dataset=dataset, target=dataset[:, 3],
   start_index=TRAIN_SPLIT, end_index=None, history_size=past_history,
   target_size=future_target, step=STEP, single_step=SINGLE_STEP)
+  
+y_data = y_data.reshape((y_data.shape[0],y_data.shape[1], 1))
 
-val_data_multi = tf.data.Dataset.from_tensor_slices((x_val_multi, y_val_multi))
-val_data_multi = val_data_multi.batch(BATCH_SIZE).repeat()
+val_data = tf.data.Dataset.from_tensor_slices((x_data, y_data))
+val_data = val_data.batch(BATCH_SIZE).repeat()
 
 
 
 # Create a new model instance
-model = keras.models.load_model('model/multi_step_final.h5')
+model = keras.models.load_model('model/seq2seqcnn.h5')
 
 # PLOT FUNCTION
 def time_steps_creation(length):
@@ -139,7 +141,7 @@ st.write("""
 The table below shows the prediction of the electrical price forecast. ements txt
 
 It is calculating using a window of 5 days, and predicts 12 hours from the moment you run it. """)
-for x, y in val_data_multi.take(1):
+for x, y in val_data.take(1):
     plt.figure(figsize=(12, 6))
     num_in = time_steps_creation(len(x[0]))
     num_out = len(y[0])
