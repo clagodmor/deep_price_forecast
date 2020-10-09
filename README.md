@@ -92,8 +92,12 @@ In the model part, a study with different configurations and methods has been ca
  2. **Multivariate time series**
     * Single-Step Model
     * Multi-step Model 
-
-Finally the selected model to make final predictions and save was the Multi-step model with the following configuration:
+ 3. **Sequence to Sequence Multivariate time series**
+    * Simple Seq2Seq LSTM Model
+    * Seq2Seq CNN-LSTM Model 
+    
+Finally the selected model to make final predictions and save was the Seq2Seq CNN-LSTM Model model with the following 
+configuration:
 
 ![model_config](img/model_config.png)
 
