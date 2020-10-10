@@ -23,6 +23,13 @@ They are applied in lists and temporary data.
   
 ![RNN](img/RNN-unrolled.png)
 
+Also Sequence to Sequence models have been applied. A typical sequence to sequence model has two parts: an encoder and 
+a decoder. Both parts are two different neural network models and are combined into one giant network. That is, the 
+model will be composed of two sub-models, the encoder to read and encode the input sequence, and the decoder that will 
+read the encoded input sequence and make a one-step prediction for each element of the output sequence.
+
+![RNN](img/encoder-decoder.png)
+
 ### Data acquisition
 
 Data has been obtained from REE, a multinational business group of Spanish origin that operates in the international 
@@ -68,16 +75,18 @@ The files obtained have a similar structure, formed by two fields:
 
 #### Preprocessing
 Preprocessing is divided in two parts, one make at [`Get_Data.ipynb`](data/Get_data.ipynb), which consist in drop duplicates,
-clean NaN and merge the dataset in only one dataframe and export. Also includes an outliners study which concludes in 
-not being significant values, so they are ignored:
+clean NaN and merge the dataset in only one dataframe and export. Also includes an outliners stud, the highest outliers 
+values are those of the price, after analyzing them they are not bad values, but unusually high prices caused by 
+facts that the model should be able to predict, that is why it is decided not to remove them:
 
 | Variable | demand | solar | wind | price |
 | --- | --- | --- | --- | --- | 
 | **Outliners** | 0 | 403 | 506 | 1609 |
 | **%** | 0 | 0.707% | 0.888% | 2.81% |
 
-The second preprocessing part is done before modelling at [`model_deep_price.ipynb`](model/model_deep_price.ipynb). Besides 
-the normalization of data for use in the neural network, the "Date" column has been modified to make it a usable signal.
+The second preprocessing part is done before modelling at [`model_deep_price.ipynb`](model/model_deep_price.ipynb) and 
+[`Seq2Seq.ipynb`](model/Seq2Seq.ipynb). Besides the normalization of data for use in the neural network, the "Date" 
+column has been modified to make it a usable signal.
 Taking into account that the electric price is highly influenced by the daily and annual periodicity, we have 
 transformed to annual and daily sinus and cosine signal dates. 
 
@@ -93,10 +102,10 @@ In the model part, a study with different configurations and methods has been ca
     * Single-Step Model
     * Multi-step Model 
  3. **Sequence to Sequence Multivariate time series**
-    * Simple Seq2Seq LSTM Model
+    * Simple Seq2Seq LSTM-LSTM Model
     * Seq2Seq CNN-LSTM Model 
     
-Finally the selected model to make final predictions and save was the Seq2Seq CNN-LSTM Model model with the following 
+Finally the selected model to make final predictions and save was the Seq2Seq CNN-LSTM Model  with the following 
 configuration:
 
 ![model_config](img/model_config.png)
@@ -105,13 +114,15 @@ configuration:
 
 1. [`model_deep_price.ipynb`](model/model_deep_price.ipynb): a Jupyter Notebook with the study of different models and the 
 development of the best fit model using RNN
+2. [`Seq2Seq.ipynb`](model/Seq2Seq.ipynb): a Jupyter Notebook with the study of Sequence to Sequence models (LSTMS-LSTM 
+and CNN-LSTM)
 
 ### Prediction and visualization
 
 The last phase in this project was trying to communicate information clearly and efficiently through plotting the 
 results. For that the [`deep_price.py`](deep_price.py) uses `streamlit`. There automatically gets today date, and 15 
-days before in order to make a prediction based on the LSTM model with the best accuracy run in 
-[`model_deep_price.ipynb`](model/model_deep_price.ipynb)
+days before in order to make a prediction based on the CNN-LSTM model with the best accuracy run in 
+[`Seq2Seq.ipynb`](model/Seq2Seq.ipynb)
 
  
 ## About the technology ##
