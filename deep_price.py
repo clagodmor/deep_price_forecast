@@ -108,7 +108,7 @@ def multivariate_window(dataset, target, start_index, end_index, history_size,
 
   return np.array(data), np.array(labels)
 
-past_history = 140
+past_history = 144
 future_target = 12
 STEP = 1
 SINGLE_STEP = False

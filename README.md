@@ -1,7 +1,7 @@
 
 Electricity price forecasting using RNN
 ===================
-`#DataScience` `#Python` `#DeepLearning` `#Electricityprice` `#Forecast` `#RNN`
+`#DataScience` `#Python` `#DeepLearning` `#Electricityprice` `#Forecast` `#RNN` `#CNN-LSTM`
 
 
 ## Objetive ##
@@ -75,9 +75,9 @@ The files obtained have a similar structure, formed by two fields:
 
 #### Preprocessing
 Preprocessing is divided in two parts, one make at [`Get_Data.ipynb`](data/Get_data.ipynb), which consist in drop duplicates,
-clean NaN and merge the dataset in only one dataframe and export. Also includes an outliners stud, the highest outliers 
-values are those of the price, after analyzing them they are not bad values, but unusually high prices caused by 
-facts that the model should be able to predict, that is why it is decided not to remove them:
+clean NaN and merge the dataset in only one dataframe and export. Also includes an outliners study, the highest outliers 
+values are the price ones, after analyzing them they are not bad values, tey're caused by facts that the model should be
+ able to predict, that is why it is decided not to remove them:
 
 | Variable | demand | solar | wind | price |
 | --- | --- | --- | --- | --- | 
@@ -101,11 +101,10 @@ In the model part, a study with different configurations and methods has been ca
  2. **Multivariate time series**
     * Single-Step Model
     * Multi-step Model 
- 3. **Sequence to Sequence Multivariate time series**
     * Simple Seq2Seq LSTM-LSTM Model
     * Seq2Seq CNN-LSTM Model 
     
-Finally the selected model to make final predictions and save was the Seq2Seq CNN-LSTM Model  with the following 
+Finally the selected model to make final predictions and save was the Seq2Seq CNN-LSTM Model with the following 
 configuration:
 
 ![model_config](img/model_config.png)
@@ -153,7 +152,7 @@ If you want to train again the model:
     
 **Modelling** 
 
-        > jupyter-notebook model_deep_learning.ipynb 
+        > jupyter-notebook Seq2Seq.ipynb 
 
 ## About the author
 
