@@ -113,7 +113,7 @@ future_target = 12
 STEP = 1
 SINGLE_STEP = False
 TRAIN_SPLIT = 0
-BATCH_SIZE=16
+BATCH_SIZE = 256
 x_data, y_data = multivariate_window(dataset=dataset, target=dataset[:, 3],
   start_index=TRAIN_SPLIT, end_index=None, history_size=past_history,
   target_size=future_target, step=STEP, single_step=SINGLE_STEP)
